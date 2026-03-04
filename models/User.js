@@ -32,6 +32,22 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    role: {
+      type: String,
+      enum: ['owner', 'staff'],
+      default: 'owner',
+      required: true,
+    },
+    employeeId: {
+      type: String,
+      trim: true,
+      uppercase: true,
+      unique: true,
+      sparse: true,
+      required: function () {
+        return this.role === 'staff';
+      },
+    },
     createdAt: {
       type: Date,
       default: Date.now,
