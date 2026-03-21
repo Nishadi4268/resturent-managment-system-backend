@@ -16,8 +16,6 @@ const checkDatabase = async () => {
       console.log(`  ID: ${user._id}`);
       console.log(`  Name: ${user.name}`);
       console.log(`  Email: ${user.email}`);
-      console.log(`  Role: ${user.role || 'NOT SET'}`);
-      console.log(`  EmployeeId: ${user.employeeId || 'N/A'}`);
       console.log('');
     });
 

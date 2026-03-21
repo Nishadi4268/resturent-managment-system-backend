@@ -36,7 +36,6 @@ exports.signup = async (req, res) => {
       name,
       email,
       password,
-      role: 'owner',
     });
 
     // Generate token
@@ -49,58 +48,6 @@ exports.signup = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role,
-      },
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-// @desc    Register staff user
-// @route   POST /api/auth/staff-signup
-// @access  Public
-exports.staffSignup = async (req, res) => {
-  try {
-    const { name, email, password, confirmPassword, employeeId } = req.body;
-
-    if (!name || !email || !password || !confirmPassword || !employeeId) {
-      return res.status(400).json({ message: 'Please provide all required fields including employee ID' });
-    }
-
-    if (password !== confirmPassword) {
-      return res.status(400).json({ message: 'Passwords do not match' });
-    }
-
-    let user = await User.findOne({ email });
-    if (user) {
-      return res.status(400).json({ message: 'User already exists' });
-    }
-
-    user = await User.findOne({ employeeId: employeeId.toUpperCase() });
-    if (user) {
-      return res.status(400).json({ message: 'Employee ID already in use' });
-    }
-
-    user = await User.create({
-      name,
-      email,
-      password,
-      role: 'staff',
-      employeeId,
-    });
-
-    const token = generateToken(user._id);
-
-    res.status(201).json({
-      success: true,
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        employeeId: user.employeeId,
       },
     });
   } catch (error) {
@@ -145,8 +92,6 @@ exports.login = async (req, res) => {
         name: user.name,
         email: user.email,
         restaurantName: user.restaurantName,
-        role: user.role,
-        employeeId: user.employeeId,
       },
     });
   } catch (error) {
